@@ -7,14 +7,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Main {
-	public static void main(String[] args) {				
+	public static void main(String[] args) throws IOException {				
 			
 		DataHandle formulaUnoDataHandler = new DataHandle();
 		FileHandle filesHandler = new FileHandle();
 		
-		List<String> racerDataList = filesHandler.getArrayList(FileHandle.racerDataFile);
-		List<String> racerStartTimeList = filesHandler.getArrayList(FileHandle.startDataFile);
-		List<String> racerEndTimeList = filesHandler.getArrayList(FileHandle.endDataFile);			
+		List<String> racerDataList = filesHandler.getDataFromFile(FileHandle.racerDataFile);
+		List<String> racerStartTimeList = filesHandler.getDataFromFile(FileHandle.startDataFile);
+		List<String> racerEndTimeList = filesHandler.getDataFromFile(FileHandle.endDataFile);			
 				
 		LinkedHashMap<String, LocalDateTime> startTime = formulaUnoDataHandler.getRacerTimesTable(racerStartTimeList);
 		LinkedHashMap<String, LocalDateTime> endTime = formulaUnoDataHandler.getRacerTimesTable(racerEndTimeList);

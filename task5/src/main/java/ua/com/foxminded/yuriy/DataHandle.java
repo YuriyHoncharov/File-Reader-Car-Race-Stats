@@ -14,9 +14,16 @@ import java.time.format.DateTimeFormatter;
 public class DataHandle {
 
 	public LinkedHashMap<String, LinkedHashMap<String, String>> getRacerDataTable(List<String> racerDataList) {
+		Pattern abbreviationPatternLine = Pattern.compile("^[A-Z]{3}_[A-Z][a-z]*( [A-Z][a-z]*)*_?[A-Z ]+$");
 		return racerDataList.stream().sorted(Comparator.comparing(str -> str.split("_")[0])).collect(LinkedHashMap::new,
 				(map, str) -> {
+					if(!str.matches(abbreviationPatternLine.pattern())) {
+						throw new IllegalArgumentException("Invalid data format");
+					}
 					String[] data = str.split("_");
+					if (data.length != 3) {
+						throw new IllegalArgumentException("Invalid data input from list of String");
+					}
 					String abbreviationRacer = data[0];
 					String abbreviationRacerName = data[1];
 					String abbreviationRacerTeam = data[2];
@@ -26,10 +33,14 @@ public class DataHandle {
 	}
 
 	public LinkedHashMap<String, LocalDateTime> getRacerTimesTable(List<String> racerTimeList) {
+		Pattern timePatternLine = Pattern.compile("^[A-Z]{3}\\d{4}-\\d{2}-\\d{2}_\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
-		return racerTimeList.stream().sorted().collect(LinkedHashMap::new,
-				(map, str) -> map.put(str.substring(0, 3), LocalDateTime.parse(str.substring(3), formatter)),
-				LinkedHashMap::putAll);
+		return racerTimeList.stream().sorted().collect(LinkedHashMap::new, (map, str) -> {
+			if (!str.matches(timePatternLine.pattern())) {
+				throw new IllegalArgumentException("Invalid string format: " + str);
+			}
+			map.put(str.substring(0, 3), LocalDateTime.parse(str.substring(3), formatter));
+		}, LinkedHashMap::putAll);
 	}
 
 	// Calculate result of the race based on 2 ArrayList, abbreviation as key and
