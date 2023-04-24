@@ -1,20 +1,25 @@
 
 package ua.com.foxminded.yuriy;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Main {
-	public static void main(String[] args) throws IOException {				
-			
+	public static void main(String[] args) throws IOException {
+		
 		DataHandle formulaUnoDataHandler = new DataHandle();
 		FileHandle filesHandler = new FileHandle();
 		
-		List<String> racerDataList = filesHandler.getDataFromFile(FileHandle.racerDataFile);
-		List<String> racerStartTimeList = filesHandler.getDataFromFile(FileHandle.startDataFile);
-		List<String> racerEndTimeList = filesHandler.getDataFromFile(FileHandle.endDataFile);			
+		File startLog = new File("start.log");
+		File endLog = new File("end.log");
+		File racerData = new File("abbreviations.txt");
+		
+		List<String> racerDataList = filesHandler.getDataFromFile(racerData);
+		List<String> racerStartTimeList = filesHandler.getDataFromFile(startLog);
+		List<String> racerEndTimeList = filesHandler.getDataFromFile(endLog);			
 				
 		LinkedHashMap<String, LocalDateTime> startTime = formulaUnoDataHandler.getRacerTimesTable(racerStartTimeList);
 		LinkedHashMap<String, LocalDateTime> endTime = formulaUnoDataHandler.getRacerTimesTable(racerEndTimeList);
